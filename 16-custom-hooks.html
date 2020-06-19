@@ -6,20 +6,26 @@
   <script type="text/babel">
     function useLocalStorageState(key, defaultValue = '') {
       const [state, setState] = React.useState(
-        () => window.localStorage.getItem(key) || defaultValue,
-      )
+        () => window.localStorage.getItem(key) || defaultValue
+      );
 
       React.useEffect(() => {
-        window.localStorage.setItem(key, state)
-      }, [key, state])
+        console.log(window.localStorage.getItem(key), state);
+        if (window.localStorage.getItem(key) !== state) {
+          window.localStorage.removeItem(key);
+        }
+        console.log(window.localStorage);
 
-      return [state, setState]
+        window.localStorage.setItem(key, state);
+      }, [key, state]);
+
+      return [state, setState];
     }
 
     function Greeting() {
-      const [name, setName] = useLocalStorageState('name')
+      const [name, setName] = useLocalStorageState('name');
 
-      const handleChange = event => setName(event.target.value)
+      const handleChange = (event) => setName(event.target.value);
 
       return (
         <div>
@@ -29,9 +35,9 @@
           </form>
           {name ? <strong>Hello {name}</strong> : 'Please type your name'}
         </div>
-      )
+      );
     }
 
-    ReactDOM.render(<Greeting />, document.getElementById('root'))
+    ReactDOM.render(<Greeting />, document.getElementById('root'));
   </script>
 </body>
